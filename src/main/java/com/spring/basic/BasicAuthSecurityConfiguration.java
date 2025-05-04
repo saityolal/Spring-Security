@@ -1,4 +1,4 @@
-package com.spring.security.basic;
+package com.spring.basic;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +21,7 @@ import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
+//@Configuration
 public class BasicAuthSecurityConfiguration {
 
     @Bean
@@ -44,17 +46,24 @@ public class BasicAuthSecurityConfiguration {
     @Bean
     public UserDetailsService UserDetailsService(DataSource dataSource) {
         var user = User.withUsername("user")
-                .password("{noop}user")
+              //  .password("{noop}user")
+                .password(passwordEncoder().encode("user"))
                 .roles("USER")
                 .build();
         var admin = User.withUsername("admin")
-                .password("{noop}admin")
+              // .password("{noop}admin")
+                .password(passwordEncoder().encode("admin"))
                 .roles("USER","ADMIN")
                 .build();
         var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.createUser(user);
         jdbcUserDetailsManager.createUser(admin);
         return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }
