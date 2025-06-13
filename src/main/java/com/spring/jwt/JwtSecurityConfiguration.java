@@ -35,7 +35,7 @@ import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
+// @Configuration
 public class JwtSecurityConfiguration {
 
     @Bean
@@ -71,7 +71,6 @@ public class JwtSecurityConfiguration {
         return jdbcUserDetailsManager;
     }
 
-
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -89,7 +88,7 @@ public class JwtSecurityConfiguration {
 
     @Bean
     public RSAKey rsaKey(KeyPair keyPair) {
-        return new RSAKey.Builder((RSAPublicKey) keyPair.getPublic()).privateKey((RSAPrivateKey) keyPair.getPrivate()).keyID(UUID.randomUUID().toString())  // Static ID for stability
+        return new RSAKey.Builder((RSAPublicKey) keyPair.getPublic()).privateKey((RSAPrivateKey) keyPair.getPrivate()).keyID(UUID.randomUUID().toString()) // Static ID for stability
                 .build();
     }
 
